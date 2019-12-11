@@ -1,0 +1,51 @@
+
+create table daniel.PRODUTOR
+(
+  cgc_produtor  VARCHAR2(14) not null,
+  nome_produtor VARCHAR2(45)
+);
+
+alter table daniel.PRODUTOR
+  add constraint PK_PRODUTOR primary key (cgc_produtor);
+  
+  
+  create table daniel.PRODUTOR_limite
+(
+  cgc_produtor  VARCHAR2(14) not null,
+  cgc_distribuidor  VARCHAR2(14) not null,
+  valor_limite number(15,4)
+);
+
+alter table daniel.PRODUTOR_limite
+  add constraint PK_PRODUTOR_limite primary key (cgc_produtor,cgc_distribuidor);
+  
+  
+create table daniel.distribuidor
+(
+  cgc_distribuidor  VARCHAR2(14) not null,
+  nome_distribuidor VARCHAR2(45)
+);
+
+alter table daniel.distribuidor
+  add constraint PK_distribuidor primary key (cgc_distribuidor);
+  
+  create table daniel.produtos
+(
+  produto_id number(38) not null,
+  nome_produto VARCHAR2(45),
+  preco number(15,4)
+);
+
+alter table daniel.produtos
+  add constraint PK_produtos primary key (produto_id);
+  
+  create table daniel.movimento
+(
+  movimento_id number(38) not null,
+  cgc_produtor  VARCHAR2(14) not null,
+  cgc_distribuidor  VARCHAR2(14) not null,  
+  Status char(2)
+);
+
+alter table daniel.movimento
+  add constraint PK_movimento primary key (movimento_id);
