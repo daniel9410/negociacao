@@ -45,6 +45,7 @@ object frmBuscaProdutor: TfrmBuscaProdutor
     Top = 40
     Width = 193
     Height = 21
+    CharCase = ecUpperCase
     MaxLength = 45
     TabOrder = 1
     OnChange = edtCgcChange

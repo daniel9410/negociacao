@@ -49,3 +49,14 @@ alter table daniel.produtos
 
 alter table daniel.movimento
   add constraint PK_movimento primary key (movimento_id);
+
+ create table daniel.Itens_movimento
+(
+  movimento_id number(38) not null,
+  produto_id number(38),
+  quantidade number(15,4),
+  preco number(15,4)
+);
+
+alter table daniel.Itens_movimento
+  add constraint PK_itens_movimento primary key (movimento_id,produto_id);

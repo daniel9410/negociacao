@@ -5,7 +5,7 @@ object frmBuscaDistribuidor: TfrmBuscaDistribuidor
   BorderStyle = bsSingle
   Caption = 'Pesquisa de Distribuidor'
   ClientHeight = 273
-  ClientWidth = 370
+  ClientWidth = 398
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -52,7 +52,7 @@ object frmBuscaDistribuidor: TfrmBuscaDistribuidor
   object DBGrid1: TDBGrid
     Left = 8
     Top = 80
-    Width = 353
+    Width = 369
     Height = 145
     DataSource = dmConexao.dsoDistribuidor
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
@@ -67,7 +67,7 @@ object frmBuscaDistribuidor: TfrmBuscaDistribuidor
         Expanded = False
         FieldName = 'CGC_DISTRIBUIDOR'
         Title.Caption = 'Cgc'
-        Width = 85
+        Width = 95
         Visible = True
       end
       item

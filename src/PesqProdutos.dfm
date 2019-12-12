@@ -1,9 +1,9 @@
-object frmBuscaDistribuidor: TfrmBuscaDistribuidor
+object frmBuscaProdutos: TfrmBuscaProdutos
   Left = 192
   Top = 124
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Pesquisa de Distribuidor'
+  Caption = 'Pesquisa de produtos'
   ClientHeight = 273
   ClientWidth = 398
   Color = clBtnFace
@@ -19,9 +19,9 @@ object frmBuscaDistribuidor: TfrmBuscaDistribuidor
   object Label1: TLabel
     Left = 16
     Top = 24
-    Width = 18
+    Width = 33
     Height = 13
-    Caption = 'cgc'
+    Caption = 'C'#243'digo'
   end
   object Label2: TLabel
     Left = 160
@@ -30,15 +30,15 @@ object frmBuscaDistribuidor: TfrmBuscaDistribuidor
     Height = 13
     Caption = 'nome'
   end
-  object edtCgc: TEdit
+  object edtCodigo: TEdit
     Left = 16
     Top = 40
     Width = 137
     Height = 21
     MaxLength = 14
     TabOrder = 0
-    OnChange = edtCgcChange
-    OnKeyPress = edtCgcKeyPress
+    OnChange = edtCodigoChange
+    OnKeyPress = edtCodigoKeyPress
   end
   object edtNome: TEdit
     Left = 160
@@ -48,14 +48,14 @@ object frmBuscaDistribuidor: TfrmBuscaDistribuidor
     CharCase = ecUpperCase
     MaxLength = 45
     TabOrder = 1
-    OnChange = edtCgcChange
+    OnChange = edtCodigoChange
   end
   object DBGrid1: TDBGrid
     Left = 8
     Top = 80
     Width = 369
     Height = 145
-    DataSource = dmConexao.dsoDistribuidor
+    DataSource = dmConexao.dsoProdutos
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
     TabOrder = 2
     TitleFont.Charset = DEFAULT_CHARSET
@@ -66,15 +66,15 @@ object frmBuscaDistribuidor: TfrmBuscaDistribuidor
     Columns = <
       item
         Expanded = False
-        FieldName = 'CGC_DISTRIBUIDOR'
-        Title.Caption = 'Cgc'
+        FieldName = 'PRODUTO_ID'
+        Title.Caption = 'Codigo'
         Width = 95
         Visible = True
       end
       item
         Expanded = False
-        FieldName = 'NOME_DISTRIBUIDOR'
-        Title.Caption = 'Nome'
+        FieldName = 'NOME_PRODUTO'
+        Title.Caption = 'Descri'#231#227'o'
         Width = 228
         Visible = True
       end>

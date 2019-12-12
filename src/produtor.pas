@@ -94,17 +94,17 @@ begin
 
   Apagar('PRODUTOR_limite',['cgc_produtor'],[edtCgc.Text]);
 
-  dmConexao.qryProdutorLimite.First;
-  while not dmConexao.qryProdutorLimite.Eof do begin
+  dmConexao.cdsProdutorLimite.First;
+  while not dmConexao.cdsProdutorLimite.Eof do begin
     Inserir('PRODUTOR_limite',
             ['cgc_produtor',
              'cgc_distribuidor',
              'valor_limite'],
             [edtCgc.Text,
-            dmConexao.qryProdutorLimiteCGC_DISTRIBUIDOR.AsString,
-            dmConexao.qryProdutorLimiteVALOR_LIMITE.AsCurrency]);
+            dmConexao.cdsProdutorLimiteCGC_DISTRIBUIDOR.AsString,
+            dmConexao.cdsProdutorLimiteVALOR_LIMITE.AsCurrency]);
 
-    dmConexao.qryProdutorLimite.Next;
+    dmConexao.cdsProdutorLimite.Next;
   end;
   Modo(False);
   ShowMessage('Registro gravado com sucesso!');
@@ -140,6 +140,22 @@ begin
     dmConexao.qryProdutorLimite.Close;
     dmConexao.qryProdutorLimite.Parameters.ParamByName('cgc_produtor').Value := edtCgc.Text;
     dmConexao.qryProdutorLimite.Open;
+
+    dmConexao.cdsProdutorLimite.Close;
+    dmConexao.cdsProdutorLimite.CreateDataSet;
+    dmConexao.cdsProdutorLimite.Open;
+
+
+    while not dmConexao.qryProdutorLimite.Eof do
+    begin
+      dmConexao.cdsProdutorLimite.Insert;
+      dmConexao.cdsProdutorLimiteCGC_PRODUTOR.AsString     := dmConexao.qryProdutorLimiteCGC_PRODUTOR.AsString;
+      dmConexao.cdsProdutorLimiteCGC_DISTRIBUIDOR.AsString := dmConexao.qryProdutorLimiteCGC_DISTRIBUIDOR.AsString;
+      dmConexao.cdsProdutorLimiteNOME_DISTRIBUIDOR.AsString:= dmConexao.qryProdutorLimiteNOME_DISTRIBUIDOR.AsString;
+      dmConexao.cdsProdutorLimiteVALOR_LIMITE.AsCurrency   := dmConexao.qryProdutorLimiteVALOR_LIMITE.AsCurrency;
+      dmConexao.cdsProdutorLimite.Post;
+      dmConexao.qryProdutorLimite.Next;
+    end;
   end
   else begin
     dmConexao.qryProdutorLimite.Close;
@@ -148,6 +164,7 @@ begin
     edtNomeDistribuidor.Text := '';
     edtValor.Text := '';
     edtcgcDistribuidor.Text := '';
+    dmConexao.cdsProdutorLimite.Close;
   end;
 end;
 procedure TfrmProdutor.edtCgcKeyDown(Sender: TObject; var Key: Word;
@@ -171,12 +188,15 @@ end;
 
 procedure TfrmProdutor.btnInserirClick(Sender: TObject);
 begin
-  dmConexao.qryProdutorLimite.Insert;
-  dmConexao.qryProdutorLimiteCGC_PRODUTOR.AsString     := edtCgc.Text;
-  dmConexao.qryProdutorLimiteCGC_DISTRIBUIDOR.AsString := edtcgcDistribuidor.Text;
-  dmConexao.qryProdutorLimiteNOME_DISTRIBUIDOR.AsString:= edtNomeDistribuidor.Text;
-  dmConexao.qryProdutorLimiteVALOR_LIMITE.AsString     := edtValor.Text;
-  dmConexao.qryProdutorLimite.Post;
+  if dmConexao.cdsProdutorLimite.Locate('CGC_DISTRIBUIDOR',edtcgcDistribuidor.Text,[]) then
+    dmConexao.cdsProdutorLimite.Edit
+  else
+    dmConexao.cdsProdutorLimite.Insert;
+  dmConexao.cdsProdutorLimiteCGC_PRODUTOR.AsString     := edtCgc.Text;
+  dmConexao.cdsProdutorLimiteCGC_DISTRIBUIDOR.AsString := edtcgcDistribuidor.Text;
+  dmConexao.cdsProdutorLimiteNOME_DISTRIBUIDOR.AsString:= edtNomeDistribuidor.Text;
+  dmConexao.cdsProdutorLimiteVALOR_LIMITE.AsCurrency   := StrToFloatDef(edtValor.Text,0);
+  dmConexao.cdsProdutorLimite.Post;
 end;
 
 procedure TfrmProdutor.edtValorKeyPress(Sender: TObject; var Key: Char);
@@ -221,7 +241,7 @@ end;
 
 procedure TfrmProdutor.btnExcluirClick(Sender: TObject);
 begin
-  dmConexao.qryProdutorLimite.Delete;  
-end;
+  dmConexao.cdsProdutorLimite.Delete;  
+end;                  
 
 end.

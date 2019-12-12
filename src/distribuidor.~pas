@@ -143,9 +143,9 @@ begin
   if frmBuscaDistribuidor.ShowModal = mrOk then begin
     edtCgc.Text  := frmBuscaDistribuidor._Cgc;
     edtNome.Text := frmBuscaDistribuidor._Nome;
+    Modo(True);
   end;
   frmBuscaDistribuidor := nil;
-  Modo(True);
 end;
 
 end.

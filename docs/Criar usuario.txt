@@ -1,6 +1,6 @@
-alter session set "_ORACLE_SCRIPT"=true;
 CREATE USER daniel IDENTIFIED BY manager;
-alter session set "_ORACLE_SCRIPT"=false;
+
 GRANT CREATE TABLE TO daniel;
 grant create session to daniel;
 ALTER USER daniel quota unlimited on users;
+ALTER USER daniel quota unlimited on system;

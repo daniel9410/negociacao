@@ -1,15 +1,16 @@
 object dmConexao: TdmConexao
   OldCreateOrder = False
-  Left = 196
-  Top = 124
+  Left = 256
+  Top = 127
   Height = 300
   Width = 447
   object con: TADOConnection
+    Connected = True
     ConnectionString = 
-      'Provider=OraOLEDB.Oracle.1;Password=manager;Persist Security Inf' +
-      'o=True;User ID=daniel;Data Source=xe'
+      'Provider=MSDAORA.1;Password=manager;User ID=daniel;Data Source=s' +
+      'ervidor;Persist Security Info=True'
     LoginPrompt = False
-    Provider = 'OraOLEDB.Oracle.1'
+    Provider = 'MSDAORA.1'
     Left = 24
     Top = 32
   end
@@ -74,6 +75,7 @@ object dmConexao: TdmConexao
         Size = 14
         Value = Null
       end>
+    Prepared = True
     SQL.Strings = (
       
         'select p.*, (Select nome_distribuidor from distribuidor d where ' +
@@ -85,27 +87,25 @@ object dmConexao: TdmConexao
     Top = 32
     object qryProdutorLimiteCGC_PRODUTOR: TStringField
       FieldName = 'CGC_PRODUTOR'
-      ProviderFlags = []
       Size = 14
     end
     object qryProdutorLimiteCGC_DISTRIBUIDOR: TStringField
       FieldName = 'CGC_DISTRIBUIDOR'
-      ProviderFlags = []
       Size = 14
     end
     object qryProdutorLimiteVALOR_LIMITE: TBCDField
       FieldName = 'VALOR_LIMITE'
-      ProviderFlags = []
+      currency = True
       Precision = 15
     end
     object qryProdutorLimiteNOME_DISTRIBUIDOR: TStringField
       FieldName = 'NOME_DISTRIBUIDOR'
-      ProviderFlags = []
+      ReadOnly = True
       Size = 45
     end
   end
   object dsoProdutorLimite: TDataSource
-    DataSet = qryProdutorLimite
+    DataSet = cdsProdutorLimite
     Left = 200
     Top = 32
   end
@@ -118,5 +118,245 @@ object dmConexao: TdmConexao
     DataSet = qryDistribuidor
     Left = 72
     Top = 200
+  end
+  object dsoProdutos: TDataSource
+    DataSet = qryProdutos
+    Left = 240
+    Top = 96
+  end
+  object qryProdutos: TADOQuery
+    Connection = con
+    Parameters = <>
+    SQL.Strings = (
+      'select * from produtos')
+    Left = 176
+    Top = 96
+    object qryProdutosPRODUTO_ID: TBCDField
+      FieldName = 'PRODUTO_ID'
+      Precision = 32
+      Size = 0
+    end
+    object qryProdutosNOME_PRODUTO: TStringField
+      FieldName = 'NOME_PRODUTO'
+      Size = 45
+    end
+    object qryProdutosPRECO: TBCDField
+      FieldName = 'PRECO'
+      Precision = 15
+    end
+  end
+  object cdsProdutorLimite: TClientDataSet
+    Active = True
+    Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'cgc_produtor'
+        DataType = ftString
+        Size = 14
+      end
+      item
+        Name = 'cgc_distribuidor'
+        DataType = ftString
+        Size = 14
+      end
+      item
+        Name = 'valor_limite'
+        DataType = ftFMTBcd
+        Precision = 15
+        Size = 2
+      end
+      item
+        Name = 'nome_Distribuidor'
+        DataType = ftString
+        Size = 45
+      end>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    Left = 288
+    Top = 32
+    Data = {
+      B60000009619E0BD020000001800000004000000000003000000B6000C636763
+      5F70726F6475746F720100490000000100055749445448020002000E00106367
+      635F646973747269627569646F72010049000000010005574944544802000200
+      0E000C76616C6F725F6C696D6974650A0012000000020008444543494D414C53
+      020002000200055749445448020002000F00116E6F6D655F4469737472696275
+      69646F720100490000000100055749445448020002002D000000}
+    object cdsProdutorLimitecgc_produtor: TStringField
+      FieldName = 'cgc_produtor'
+      Size = 14
+    end
+    object cdsProdutorLimitecgc_distribuidor: TStringField
+      FieldName = 'cgc_distribuidor'
+      Size = 14
+    end
+    object cdsProdutorLimitenome_Distribuidor: TStringField
+      FieldName = 'nome_Distribuidor'
+      Size = 45
+    end
+    object cdsProdutorLimitevalor_limite: TFMTBCDField
+      FieldName = 'valor_limite'
+      Precision = 32
+      Size = 0
+    end
+  end
+  object cdsItens_Movimento: TClientDataSet
+    Active = True
+    Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'movimento_id'
+        DataType = ftInteger
+      end
+      item
+        Name = 'produto_id'
+        DataType = ftInteger
+      end
+      item
+        Name = 'valor'
+        DataType = ftFMTBcd
+        Precision = 15
+        Size = 2
+      end
+      item
+        Name = 'quantidade'
+        DataType = ftFMTBcd
+        Precision = 15
+        Size = 2
+      end
+      item
+        Name = 'nome_produto'
+        DataType = ftString
+        Size = 45
+      end
+      item
+        Name = 'total'
+        DataType = ftCurrency
+      end>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    Left = 168
+    Top = 160
+    Data = {
+      DC0000009619E0BD020000001800000006000000000003000000DC000C6D6F76
+      696D656E746F5F696404000100000000000A70726F6475746F5F696404000100
+      000000000576616C6F720A0012000000020008444543494D414C530200020002
+      00055749445448020002000F000A7175616E7469646164650A00120000000200
+      08444543494D414C53020002000200055749445448020002000F000C6E6F6D65
+      5F70726F6475746F0100490000000100055749445448020002002D0005746F74
+      616C080004000000010007535542545950450200490006004D6F6E6579000000}
+    object cdsItens_Movimentomovimento_id: TIntegerField
+      FieldName = 'movimento_id'
+    end
+    object cdsItens_Movimentoproduto_id: TIntegerField
+      FieldName = 'produto_id'
+    end
+    object cdsItens_Movimentovalor: TFMTBCDField
+      FieldName = 'valor'
+      Precision = 15
+      Size = 2
+    end
+    object cdsItens_Movimentoquantidade: TFMTBCDField
+      FieldName = 'quantidade'
+      Precision = 15
+      Size = 2
+    end
+    object cdsItens_Movimentonome_produto: TStringField
+      FieldName = 'nome_produto'
+      Size = 45
+    end
+    object cdsItens_Movimentototal: TCurrencyField
+      FieldName = 'total'
+    end
+  end
+  object dsoItens_Movimento: TDataSource
+    DataSet = cdsItens_Movimento
+    Left = 256
+    Top = 160
+  end
+  object qryItens_Movimento: TADOQuery
+    Connection = con
+    CursorType = ctStatic
+    Parameters = <
+      item
+        Name = 'Movimento_id'
+        DataType = ftInteger
+        Size = -1
+        Value = Null
+      end>
+    SQL.Strings = (
+      'select i.*, p.nome_produto from itens_movimento i, produtos p'
+      'where movimento_id = :Movimento_id'
+      '   and p.produto_id = i.produto_id')
+    Left = 336
+    Top = 152
+    object qryItens_MovimentoMOVIMENTO_ID: TBCDField
+      FieldName = 'MOVIMENTO_ID'
+      Precision = 32
+      Size = 0
+    end
+    object qryItens_MovimentoPRODUTO_ID: TBCDField
+      FieldName = 'PRODUTO_ID'
+      Precision = 32
+      Size = 0
+    end
+    object qryItens_MovimentoQUANTIDADE: TBCDField
+      FieldName = 'QUANTIDADE'
+      Precision = 15
+    end
+    object qryItens_MovimentoPRECO: TBCDField
+      FieldName = 'PRECO'
+      Precision = 15
+    end
+    object qryItens_MovimentoNOME_PRODUTO: TStringField
+      FieldName = 'NOME_PRODUTO'
+      Size = 45
+    end
+  end
+  object qryMovimento: TADOQuery
+    Connection = con
+    Parameters = <>
+    SQL.Strings = (
+      'select m.*, p.nome_produtor, d.nome_distribuidor'
+      '  from movimento m, '
+      '       produtor p,'
+      '       distribuidor d '
+      ' where 1 = 1 '
+      '  and p.cgc_produtor = m.cgc_produtor'
+      'and d.cgc_distribuidor = m.cgc_distribuidor')
+    Left = 360
+    Top = 32
+    object qryMovimentoMOVIMENTO_ID: TBCDField
+      FieldName = 'MOVIMENTO_ID'
+      Precision = 38
+      Size = 0
+    end
+    object qryMovimentoCGC_PRODUTOR: TStringField
+      FieldName = 'CGC_PRODUTOR'
+      Size = 14
+    end
+    object qryMovimentoCGC_DISTRIBUIDOR: TStringField
+      FieldName = 'CGC_DISTRIBUIDOR'
+      Size = 14
+    end
+    object qryMovimentoSTATUS: TStringField
+      FieldName = 'STATUS'
+      FixedChar = True
+      Size = 2
+    end
+    object qryMovimentoNOME_PRODUTOR: TStringField
+      FieldName = 'NOME_PRODUTOR'
+      Size = 45
+    end
+    object qryMovimentoNOME_DISTRIBUIDOR: TStringField
+      FieldName = 'NOME_DISTRIBUIDOR'
+      Size = 45
+    end
+  end
+  object dsoMovimento: TDataSource
+    DataSet = qryMovimento
+    Left = 360
+    Top = 80
   end
 end

@@ -3,7 +3,7 @@ unit conexao;
 interface
 
 uses
-  SysUtils, Classes, DB, ADODB;
+  SysUtils, Classes, DB, ADODB, DBClient;
 
 type
   TdmConexao = class(TDataModule)
@@ -22,7 +22,40 @@ type
     qryProdutorLimiteCGC_PRODUTOR: TStringField;
     qryProdutorLimiteCGC_DISTRIBUIDOR: TStringField;
     qryProdutorLimiteVALOR_LIMITE: TBCDField;
+    dsoProdutos: TDataSource;
+    qryProdutos: TADOQuery;
+    qryProdutosPRODUTO_ID: TBCDField;
+    qryProdutosNOME_PRODUTO: TStringField;
+    qryProdutosPRECO: TBCDField;
+    cdsProdutorLimite: TClientDataSet;
+    cdsProdutorLimitecgc_produtor: TStringField;
+    cdsProdutorLimitecgc_distribuidor: TStringField;
+    cdsProdutorLimitenome_Distribuidor: TStringField;
     qryProdutorLimiteNOME_DISTRIBUIDOR: TStringField;
+    cdsProdutorLimitevalor_limite: TFMTBCDField;
+    cdsItens_Movimento: TClientDataSet;
+    cdsItens_Movimentomovimento_id: TIntegerField;
+    cdsItens_Movimentoproduto_id: TIntegerField;
+    cdsItens_Movimentovalor: TFMTBCDField;
+    cdsItens_Movimentoquantidade: TFMTBCDField;
+    dsoItens_Movimento: TDataSource;
+    cdsItens_Movimentonome_produto: TStringField;
+    qryItens_Movimento: TADOQuery;
+    qryItens_MovimentoMOVIMENTO_ID: TBCDField;
+    qryItens_MovimentoPRODUTO_ID: TBCDField;
+    qryItens_MovimentoQUANTIDADE: TBCDField;
+    qryItens_MovimentoPRECO: TBCDField;
+    qryItens_MovimentoNOME_PRODUTO: TStringField;
+    qryMovimento: TADOQuery;
+    qryMovimentoMOVIMENTO_ID: TBCDField;
+    qryMovimentoCGC_PRODUTOR: TStringField;
+    qryMovimentoCGC_DISTRIBUIDOR: TStringField;
+    qryMovimentoSTATUS: TStringField;
+    qryMovimentoNOME_PRODUTOR: TStringField;
+    dsoMovimento: TDataSource;
+    qryMovimentoNOME_DISTRIBUIDOR: TStringField;
+    cdsItens_Movimentototal: TCurrencyField;
+    procedure cdsItens_MovimentoAfterScroll(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -35,5 +68,10 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TdmConexao.cdsItens_MovimentoAfterScroll(DataSet: TDataSet);
+begin
+  cdsItens_Movimentototal.AsCurrency := cdsItens_Movimentoquantidade.AsCurrency * cdsItens_Movimentovalor.AsCurrency;
+end;
 
 end.
