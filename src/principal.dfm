@@ -122,11 +122,16 @@ object frmPrincipal: TfrmPrincipal
         Caption = 'Negocia'#231#227'o'
         OnClick = Negociao1Click
       end
+      object Manuteno1: TMenuItem
+        Caption = 'Manuten'#231#227'o'
+        OnClick = Manuteno1Click
+      end
     end
     object Relatorio1: TMenuItem
       Caption = 'Relatorio'
       object Relatorio2: TMenuItem
         Caption = 'Relatorio'
+        OnClick = Relatorio2Click
       end
     end
     object Sair1: TMenuItem

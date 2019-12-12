@@ -39,12 +39,16 @@ alter table daniel.distribuidor
 alter table daniel.produtos
   add constraint PK_produtos primary key (produto_id);
   
-  create table daniel.movimento
+create table daniel.movimento
 (
   movimento_id number(38) not null,
   cgc_produtor  VARCHAR2(14) not null,
   cgc_distribuidor  VARCHAR2(14) not null,  
-  Status char(2)
+  Status char(2),
+  cadastro date,
+  aprovacao date,
+  cancelamento date,
+  Conclusao date
 );
 
 alter table daniel.movimento

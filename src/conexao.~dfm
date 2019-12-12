@@ -7,8 +7,8 @@ object dmConexao: TdmConexao
   object con: TADOConnection
     Connected = True
     ConnectionString = 
-      'Provider=MSDAORA.1;Password=manager;User ID=daniel;Data Source=s' +
-      'ervidor;Persist Security Info=True'
+      'Provider=MSDAORA.1;Password=manager;User ID=daniel;Data Source=m' +
+      'aster;Persist Security Info=True'
     LoginPrompt = False
     Provider = 'MSDAORA.1'
     Left = 24
@@ -83,8 +83,8 @@ object dmConexao: TdmConexao
       '  from PRODUTOR_limite p'
       '          '
       'where cgc_produtor = :cgc_produtor')
-    Left = 112
-    Top = 32
+    Left = 96
+    Top = 16
     object qryProdutorLimiteCGC_PRODUTOR: TStringField
       FieldName = 'CGC_PRODUTOR'
       Size = 14
@@ -106,8 +106,8 @@ object dmConexao: TdmConexao
   end
   object dsoProdutorLimite: TDataSource
     DataSet = cdsProdutorLimite
-    Left = 200
-    Top = 32
+    Left = 88
+    Top = 72
   end
   object dsoProdutor: TDataSource
     DataSet = qryProdutor
@@ -173,8 +173,8 @@ object dmConexao: TdmConexao
     IndexDefs = <>
     Params = <>
     StoreDefs = True
-    Left = 288
-    Top = 32
+    Left = 176
+    Top = 16
     Data = {
       B60000009619E0BD020000001800000004000000000003000000B6000C636763
       5F70726F6475746F720100490000000100055749445448020002000E00106367
@@ -236,9 +236,8 @@ object dmConexao: TdmConexao
     IndexDefs = <>
     Params = <>
     StoreDefs = True
-    AfterScroll = cdsItens_MovimentoAfterScroll
     Left = 168
-    Top = 160
+    Top = 176
     Data = {
       DC0000009619E0BD020000001800000006000000000003000000DC000C6D6F76
       696D656E746F5F696404000100000000000A70726F6475746F5F696404000100
@@ -290,8 +289,8 @@ object dmConexao: TdmConexao
       'select i.*, p.nome_produto from itens_movimento i, produtos p'
       'where movimento_id = :Movimento_id'
       '   and p.produto_id = i.produto_id')
-    Left = 336
-    Top = 152
+    Left = 344
+    Top = 144
     object qryItens_MovimentoMOVIMENTO_ID: TBCDField
       FieldName = 'MOVIMENTO_ID'
       Precision = 32
@@ -330,7 +329,7 @@ object dmConexao: TdmConexao
     Top = 32
     object qryMovimentoMOVIMENTO_ID: TBCDField
       FieldName = 'MOVIMENTO_ID'
-      Precision = 38
+      Precision = 32
       Size = 0
     end
     object qryMovimentoCGC_PRODUTOR: TStringField
@@ -354,10 +353,107 @@ object dmConexao: TdmConexao
       FieldName = 'NOME_DISTRIBUIDOR'
       Size = 45
     end
+    object qryMovimentoCADASTRO: TDateTimeField
+      FieldName = 'CADASTRO'
+    end
+    object qryMovimentoAPROVACAO: TDateTimeField
+      FieldName = 'APROVACAO'
+    end
+    object qryMovimentoCANCELAMENTO: TDateTimeField
+      FieldName = 'CANCELAMENTO'
+    end
+    object qryMovimentoCONCLUSAO: TDateTimeField
+      FieldName = 'CONCLUSAO'
+    end
   end
   object dsoMovimento: TDataSource
     DataSet = qryMovimento
     Left = 360
     Top = 80
+  end
+  object dsoRelatorio: TDataSource
+    DataSet = qryRelatorio
+    Left = 264
+    Top = 216
+  end
+  object qryRelatorio: TADOQuery
+    Connection = con
+    Parameters = <>
+    SQL.Strings = (
+      'select m.movimento_id,'
+      '  m.cgc_produtor,'
+      '  m.cgc_distribuidor,  '
+      '  m.Status,'
+      '  m.cadastro,'
+      '  m.aprovacao,'
+      '  m.cancelamento,'
+      '  m.Conclusao, p.nome_produtor, d.nome_distribuidor,'
+      '  sum(i.preco * i.quantidade) as Valor'
+      '  from movimento m,'
+      '          itens_movimento i, '
+      '       produtor p,'
+      '       distribuidor d '
+      ' where i.movimento_id = m.movimento_id'
+      '  and p.cgc_produtor = m.cgc_produtor'
+      'and d.cgc_distribuidor = m.cgc_distribuidor'
+      'group by m.movimento_id,'
+      '  m.cgc_produtor,'
+      '  m.cgc_distribuidor,  '
+      '  m.Status,'
+      '  m.cadastro,'
+      '  m.aprovacao,'
+      '  m.cancelamento,'
+      '  m.Conclusao, p.nome_produtor, d.nome_distribuidor')
+    Left = 344
+    Top = 216
+    object BCDField1: TBCDField
+      FieldName = 'MOVIMENTO_ID'
+      Precision = 32
+      Size = 0
+    end
+    object StringField1: TStringField
+      FieldName = 'CGC_PRODUTOR'
+      Size = 14
+    end
+    object StringField2: TStringField
+      FieldName = 'CGC_DISTRIBUIDOR'
+      Size = 14
+    end
+    object StringField3: TStringField
+      FieldName = 'STATUS'
+      FixedChar = True
+      Size = 2
+    end
+    object StringField4: TStringField
+      FieldName = 'NOME_PRODUTOR'
+      Size = 45
+    end
+    object StringField5: TStringField
+      FieldName = 'NOME_DISTRIBUIDOR'
+      Size = 45
+    end
+    object DateTimeField1: TDateTimeField
+      FieldName = 'CADASTRO'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object DateTimeField2: TDateTimeField
+      FieldName = 'APROVACAO'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object DateTimeField3: TDateTimeField
+      FieldName = 'CANCELAMENTO'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object DateTimeField4: TDateTimeField
+      FieldName = 'CONCLUSAO'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object qryRelatorioVALOR: TBCDField
+      FieldName = 'VALOR'
+      ReadOnly = True
+      DisplayFormat = '###,##0.00'
+      Precision = 32
+      Size = 0
+    end
   end
 end

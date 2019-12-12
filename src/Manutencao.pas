@@ -1,4 +1,4 @@
-unit movimento;
+unit Manutencao;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   Dialogs,biblioteca, StdCtrls, conexao, Mask, DBCtrls, Grids, DBGrids;
 
 type
-  TfrmMovimento = class(TForm)
+  TfrmManutencao = class(TForm)
     btnDeletar: TButton;
     btnGravar: TButton;
     btnCancelar: TButton;
@@ -19,27 +19,20 @@ type
     a: TDBGrid;
     edtcgcDistribuidor: TEdit;
     Label3: TLabel;
-    edtValor: TEdit;
-    Label4: TLabel;
     btnInserir: TButton;
     btnExcluir: TButton;
     btnPesqDistribuidor: TButton;
     edtNomeDistribuidor: TEdit;
-    edtPreco: TEdit;
-    Label5: TLabel;
-    edtcodproduto: TEdit;
-    btnProdutos: TButton;
-    edtnomeproduto: TEdit;
     btnprodutor: TButton;
     edtcodigo: TEdit;
     Label6: TLabel;
-    Label7: TLabel;
+    cbxStatus: TComboBox;
+    Label8: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnDeletarClick(Sender: TObject);
     procedure btnGravarClick(Sender: TObject);
     procedure edtCgcKeyPress(Sender: TObject; var Key: Char);
     procedure btnCancelarClick(Sender: TObject);
-    procedure btnInserirClick(Sender: TObject);
     procedure edtValorKeyPress(Sender: TObject; var Key: Char);
     procedure btnPesqDistribuidorClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -48,7 +41,6 @@ type
     procedure edtcodigoKeyPress(Sender: TObject; var Key: Char);
     procedure edtcodigoKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure btnProdutosClick(Sender: TObject);
     procedure btnPesquisaClick(Sender: TObject);
   private
     { Private declarations }
@@ -59,20 +51,20 @@ type
   end;
 
 var
-  frmMovimento: TfrmMovimento;
+  frmManutencao: TfrmManutencao;
 
 implementation
     uses Math,PesqMovimentacao, PesqProdutos, PesqDistribuidor,PesqProdutor, DB;
 {$R *.dfm}
 
-procedure TfrmMovimento.FormClose(Sender: TObject;
+procedure TfrmManutencao.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
-  frmMovimento := nil;
+  frmManutencao := nil;
   Action:= caFree;
 end;
 
-procedure TfrmMovimento.btnDeletarClick(Sender: TObject);
+procedure TfrmManutencao.btnDeletarClick(Sender: TObject);
 begin
   if Questionar('Deseja excluir o registro?')  then begin
     Apagar('itens_movimento',['movimento_id'],[edtcodigo.Text]);
@@ -81,7 +73,7 @@ begin
   end;
 end;
 
-function TfrmMovimento.ValidaLimite : Boolean;
+function TfrmManutencao.ValidaLimite : Boolean;
 var vTotUsado : Double;
     vValorCredto : Double;
     vTotalAUsar  : Double;
@@ -130,8 +122,9 @@ begin
 
 end;
 
-procedure TfrmMovimento.btnGravarClick(Sender: TObject);
+procedure TfrmManutencao.btnGravarClick(Sender: TObject);
 var vStatus : string;
+    vDataApro,vDataCancel,  vConclusao: TDateTime;
 begin
   if not ValidaLimite then begin
     ShowMessage('O produtor não possue saldo para realizar esta negociação!');
@@ -145,21 +138,31 @@ begin
                                ' where movimento_id = '''+ edtcodigo.Text +''' ';
   dmConexao.qryAux.Open;
 
-
-  vStatus := 'PE';
-
+  if cbxStatus.ItemIndex = 0 then
+    vStatus := 'PE'
+  else if cbxStatus.ItemIndex = 1 then begin
+    vStatus := 'AP';
+    vDataApro := Now;
+  end
+  else if cbxStatus.ItemIndex = 2 then begin
+    vStatus := 'CO';
+    vConclusao := now;
+  end
+  else if cbxStatus.ItemIndex = 3 then begin
+    vStatus := 'CA';
+    vDataCancel := Now;
+  end;
   if dmConexao.qryAux.Eof then begin
     Inserir('movimento',
             ['cgc_produtor',
              'movimento_id',
              'cgc_distribuidor',
              'Status',
-             'cadastro'],
+             'Cadastro'],
             [edtCgc.Text,
             edtcodigo.Text,
             edtcgcDistribuidor.Text,
-            vStatus,
-            Now]);
+            vStatus, Now]);
   end
   else begin
     Atualizar('movimento',
@@ -167,51 +170,40 @@ begin
             [edtcodigo.Text],
             ['cgc_distribuidor',
             'cgc_produtor',
-            'Status'],
+            'Status',
+            'aprovacao',
+            'cancelamento',
+            'Conclusao'],
             [edtcgcDistribuidor.Text,
             edtCgc.Text,
-            vStatus]);
+            vStatus,
+            vDataApro,
+            vDataCancel,
+            vConclusao]);
   end;
 
-  Apagar('itens_movimento',['movimento_id'],[edtcodigo.Text]);
-
-  dmConexao.cdsItens_Movimento.First;
-  while not dmConexao.cdsItens_Movimento.Eof do begin
-    Inserir('itens_movimento',
-            ['produto_id',
-             'movimento_id',
-             'quantidade',
-             'preco'],
-            [dmConexao.cdsItens_Movimentoproduto_id.AsInteger,
-             edtcodigo.Text,
-            dmConexao.cdsItens_Movimentoquantidade.AsCurrency ,
-            dmConexao.cdsItens_Movimentovalor.AsCurrency]);
-
-    dmConexao.cdsItens_Movimento.Next;
-  end;
   Modo(False);
   ShowMessage('Registro gravado com sucesso!');
 end;
 
-procedure TfrmMovimento.edtCgcKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmManutencao.edtCgcKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key in ['0'..'9',#8] then
   else
     Key := #0;
 end;
 
-procedure TfrmMovimento.btnCancelarClick(Sender: TObject);
+procedure TfrmManutencao.btnCancelarClick(Sender: TObject);
 begin
   if Questionar('Deseja cancelar a edição?') then
     Modo(False);
 end;
 
-procedure TfrmMovimento.Modo(pvalor: Boolean);
+procedure TfrmManutencao.Modo(pvalor: Boolean);
 begin
   edtcodigo.Enabled           := not pvalor;
   edtCgc.Enabled              :=  pvalor;
   edtNome.Enabled             :=  pvalor;
-  edtValor.Enabled            :=  pvalor;
   btnInserir.Enabled          :=  pvalor;
   btnExcluir.Enabled          :=  pvalor;
   btnPesqDistribuidor.Enabled :=  pvalor;
@@ -220,7 +212,7 @@ begin
   btnGravar.Enabled           := pvalor;
   btnCancelar.Enabled         := pvalor;
   btnprodutor.Enabled         := pvalor;
-  btnProdutos.Enabled         := pvalor;
+  cbxStatus.Enabled         := pvalor;
 
   if pvalor then begin
     dmConexao.qryItens_Movimento.Close;
@@ -251,43 +243,23 @@ begin
     edtcodigo.Text := '';
     edtNome.Text := '';
     edtNomeDistribuidor.Text := '';
-    edtValor.Text := '';
+
     edtcgcDistribuidor.Text := '';
     dmConexao.cdsItens_Movimento.Close;
-    edtcodproduto.Clear;
-    edtnomeproduto.Clear;
-    edtPreco.Clear;
+
+
+
 
   end;
 end;
-procedure TfrmMovimento.btnInserirClick(Sender: TObject);
-begin
-  if dmConexao.cdsItens_Movimento.Locate('produto_id',edtcodproduto.Text,[]) then
-    dmConexao.cdsItens_Movimento.Edit
-  else
-    dmConexao.cdsItens_Movimento.Insert;
-  dmConexao.cdsItens_Movimentomovimento_id.AsString    := edtcodigo.Text;
-  dmConexao.cdsItens_Movimentoproduto_id.AsString := edtcodproduto.Text;
-  dmConexao.cdsItens_Movimentovalor.AsCurrency    := StrToFloatDef(edtPreco.Text,0);
-  dmConexao.cdsItens_Movimentoquantidade.AsCurrency := StrToFloatDef(edtValor.Text,0);
-  dmConexao.cdsItens_Movimentonome_produto.AsString := edtnomeproduto.Text;
-  dmConexao.cdsItens_Movimentototal.AsCurrency      := StrToFloatDef(edtPreco.Text,0) * StrToFloatDef(edtValor.Text,0);
-  dmConexao.cdsItens_Movimento.Post;
-
-  edtcodproduto.Clear;
-  edtnomeproduto.Clear;
-  edtPreco.Clear;
-  edtValor.Text := '';
-end;
-
-procedure TfrmMovimento.edtValorKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmManutencao.edtValorKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key in ['0'..'9',',',#8] then
   else
     key := #0;
 end;
 
-procedure TfrmMovimento.btnPesqDistribuidorClick(Sender: TObject);
+procedure TfrmManutencao.btnPesqDistribuidorClick(Sender: TObject);
 begin
   if frmBuscaDistribuidor = nil then
     frmBuscaDistribuidor := TfrmBuscaDistribuidor.Create(Self);
@@ -299,18 +271,18 @@ begin
   frmBuscaDistribuidor := nil;
 end;
 
-procedure TfrmMovimento.FormShow(Sender: TObject);
+procedure TfrmManutencao.FormShow(Sender: TObject);
 begin
   Modo(False);
   edtcodigo.SetFocus;
 end;
 
-procedure TfrmMovimento.btnExcluirClick(Sender: TObject);
+procedure TfrmManutencao.btnExcluirClick(Sender: TObject);
 begin
   dmConexao.cdsItens_Movimento.Delete;  
 end;                  
 
-procedure TfrmMovimento.btnprodutorClick(Sender: TObject);
+procedure TfrmManutencao.btnprodutorClick(Sender: TObject);
 begin
   if frmBuscaProdutor = nil then
     frmBuscaProdutor := TfrmBuscaProdutor.Create(Self);
@@ -322,28 +294,23 @@ begin
   frmBuscaProdutor := nil;
 end;
 
-procedure TfrmMovimento.edtcodigoKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmManutencao.edtcodigoKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key in ['0'..'9',#8] then
   else
     Key := #0;
 end;
 
-procedure TfrmMovimento.edtcodigoKeyDown(Sender: TObject; var Key: Word;
+procedure TfrmManutencao.edtcodigoKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = 13 then begin
     if edtCodigo.Text = '' then begin
-      dmConexao.qryAux.Close;
-      dmConexao.qryAux.SQL.Clear;
-      dmConexao.qryAux.SQL.Text := 'select NVL(Max(movimento_id),0) + 1 as Valor '+
-                                   '  from movimento ';
-      dmConexao.qryAux.Open;
+      ShowMessage('Esta negociação não existe!');
+      Abort;
+    end;
 
-      edtCodigo.Text  := dmConexao.qryAux.FieldValues['Valor'];
-
-    end
-    else begin
+    if edtCodigo.Text <> '' then begin
 
       dmConexao.qryAux.Close;
       dmConexao.qryAux.SQL.Clear;
@@ -364,7 +331,18 @@ begin
         edtcgcDistribuidor.Text := dmConexao.qryAux.FieldValues['cgc_distribuidor'];
         edtNomeDistribuidor.Text  := dmConexao.qryAux.FieldValues['nome_distribuidor'];
 
-        
+        if dmConexao.qryAux.FieldValues['status'] = 'PE' then
+          cbxStatus.ItemIndex := 0
+        else if dmConexao.qryAux.FieldValues['status'] = 'AP' then
+          cbxStatus.ItemIndex := 1
+        else if dmConexao.qryAux.FieldValues['status'] = 'CO' then
+          cbxStatus.ItemIndex := 2
+        else if dmConexao.qryAux.FieldValues['status'] = 'CA' then
+          cbxStatus.ItemIndex := 3;
+      end
+      else begin
+        ShowMessage('Esta negociação não existe!');
+        Abort;
       end;
     end;
 
@@ -373,21 +351,7 @@ begin
   end;
 end;
 
-procedure TfrmMovimento.btnProdutosClick(Sender: TObject);
-begin
-  if frmBuscaProdutos = nil then
-    frmBuscaProdutos := TfrmBuscaProdutos.Create(Self);
-
-  if frmBuscaProdutos.ShowModal = mrOk then begin
-    edtcodproduto.Text := frmBuscaProdutos._Codigo;
-    edtnomeproduto.Text   := frmBuscaProdutos._Nome;
-    edtPreco.Text  := frmBuscaProdutos._Valor;
-    Modo(True);
-  end;
-  frmBuscaProdutos := nil;
-end;
-
-procedure TfrmMovimento.btnPesquisaClick(Sender: TObject);
+procedure TfrmManutencao.btnPesquisaClick(Sender: TObject);
 var vKey: Word;
   vShift: TShiftState;
 begin

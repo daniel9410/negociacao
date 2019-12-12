@@ -34,8 +34,6 @@ type
     edtcodigo: TEdit;
     Label6: TLabel;
     Label7: TLabel;
-    cbxStatus: TComboBox;
-    Label8: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnDeletarClick(Sender: TObject);
     procedure btnGravarClick(Sender: TObject);
@@ -147,24 +145,21 @@ begin
                                ' where movimento_id = '''+ edtcodigo.Text +''' ';
   dmConexao.qryAux.Open;
 
-  if cbxStatus.ItemIndex = 0 then
-    vStatus := 'PE'
-  else if cbxStatus.ItemIndex = 1 then
-    vStatus := 'AP'
-  else if cbxStatus.ItemIndex = 2 then
-    vStatus := 'CO'
-  else if cbxStatus.ItemIndex = 3 then
-    vStatus := 'CA';
+
+  vStatus := 'PE';
+
   if dmConexao.qryAux.Eof then begin
     Inserir('movimento',
             ['cgc_produtor',
              'movimento_id',
              'cgc_distribuidor',
-             'Status'],
+             'Status',
+             'cadastro'],
             [edtCgc.Text,
             edtcodigo.Text,
             edtcgcDistribuidor.Text,
-            vStatus]);
+            vStatus,
+            Now]);
   end
   else begin
     Atualizar('movimento',
@@ -226,7 +221,6 @@ begin
   btnCancelar.Enabled         := pvalor;
   btnprodutor.Enabled         := pvalor;
   btnProdutos.Enabled         := pvalor;
-  cbxStatus.Enabled         := pvalor;
 
   if pvalor then begin
     dmConexao.qryItens_Movimento.Close;
@@ -370,14 +364,7 @@ begin
         edtcgcDistribuidor.Text := dmConexao.qryAux.FieldValues['cgc_distribuidor'];
         edtNomeDistribuidor.Text  := dmConexao.qryAux.FieldValues['nome_distribuidor'];
 
-        if dmConexao.qryAux.FieldValues['status'] = 'PE' then
-          cbxStatus.ItemIndex := 0
-        else if dmConexao.qryAux.FieldValues['status'] = 'AP' then
-          cbxStatus.ItemIndex := 1
-        else if dmConexao.qryAux.FieldValues['status'] = 'CO' then
-          cbxStatus.ItemIndex := 2
-        else if dmConexao.qryAux.FieldValues['status'] = 'CA' then
-          cbxStatus.ItemIndex := 3;
+        
       end;
     end;
 

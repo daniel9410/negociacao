@@ -1,9 +1,9 @@
-object frmMovimento: TfrmMovimento
+object frmManutencao: TfrmManutencao
   Left = 198
   Top = 102
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Movimentacao de produtos'
+  Caption = 'Manuten'#231#227'o de Movimentacao '
   ClientHeight = 360
   ClientWidth = 508
   Color = clBtnFace
@@ -42,20 +42,6 @@ object frmMovimento: TfrmMovimento
     Height = 13
     Caption = 'Distribuidor'
   end
-  object Label4: TLabel
-    Left = 368
-    Top = 192
-    Width = 55
-    Height = 13
-    Caption = 'Quantidade'
-  end
-  object Label5: TLabel
-    Left = 16
-    Top = 190
-    Width = 37
-    Height = 13
-    Caption = 'Produto'
-  end
   object Label6: TLabel
     Left = 16
     Top = 112
@@ -63,12 +49,12 @@ object frmMovimento: TfrmMovimento
     Height = 13
     Caption = 'C'#243'digo'
   end
-  object Label7: TLabel
-    Left = 312
-    Top = 192
-    Width = 28
+  object Label8: TLabel
+    Left = 16
+    Top = 152
+    Width = 30
     Height = 13
-    Caption = 'Pre'#231'o'
+    Caption = 'Status'
   end
   object btnDeletar: TButton
     Left = 8
@@ -187,23 +173,14 @@ object frmMovimento: TfrmMovimento
     ReadOnly = True
     TabOrder = 8
   end
-  object edtValor: TEdit
-    Left = 368
-    Top = 206
-    Width = 60
-    Height = 21
-    MaxLength = 15
-    TabOrder = 9
-    OnKeyPress = edtValorKeyPress
-  end
   object btnInserir: TButton
     Left = 440
     Top = 232
     Width = 51
     Height = 25
     Caption = 'Inserir'
-    TabOrder = 10
-    OnClick = btnInserirClick
+    TabOrder = 9
+    Visible = False
   end
   object btnExcluir: TButton
     Left = 440
@@ -211,7 +188,8 @@ object frmMovimento: TfrmMovimento
     Width = 51
     Height = 25
     Caption = 'Excluir'
-    TabOrder = 11
+    TabOrder = 10
+    Visible = False
     OnClick = btnExcluirClick
   end
   object btnPesqDistribuidor: TButton
@@ -220,7 +198,7 @@ object frmMovimento: TfrmMovimento
     Width = 20
     Height = 20
     Caption = '...'
-    TabOrder = 12
+    TabOrder = 11
     OnClick = btnPesqDistribuidorClick
   end
   object edtNomeDistribuidor: TEdit
@@ -230,44 +208,7 @@ object frmMovimento: TfrmMovimento
     Height = 21
     Color = clBtnFace
     ReadOnly = True
-    TabOrder = 13
-  end
-  object edtPreco: TEdit
-    Left = 312
-    Top = 206
-    Width = 49
-    Height = 21
-    Color = clBtnFace
-    ReadOnly = True
-    TabOrder = 14
-  end
-  object edtcodproduto: TEdit
-    Left = 16
-    Top = 206
-    Width = 121
-    Height = 21
-    Color = clBtnFace
-    MaxLength = 14
-    ReadOnly = True
-    TabOrder = 15
-  end
-  object btnProdutos: TButton
-    Left = 141
-    Top = 206
-    Width = 20
-    Height = 20
-    Caption = '...'
-    TabOrder = 16
-    OnClick = btnProdutosClick
-  end
-  object edtnomeproduto: TEdit
-    Left = 168
-    Top = 206
-    Width = 137
-    Height = 21
-    Color = clBtnFace
-    ReadOnly = True
-    TabOrder = 17
+    TabOrder = 12
   end
   object btnprodutor: TButton
     Left = 267
@@ -275,7 +216,7 @@ object frmMovimento: TfrmMovimento
     Width = 20
     Height = 20
     Caption = '...'
-    TabOrder = 18
+    TabOrder = 13
     OnClick = btnprodutorClick
   end
   object edtcodigo: TEdit
@@ -286,5 +227,21 @@ object frmMovimento: TfrmMovimento
     TabOrder = 4
     OnKeyDown = edtcodigoKeyDown
     OnKeyPress = edtcodigoKeyPress
+  end
+  object cbxStatus: TComboBox
+    Left = 16
+    Top = 168
+    Width = 129
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    ItemIndex = 0
+    TabOrder = 14
+    Text = 'Pendente'
+    Items.Strings = (
+      'Pendente'
+      'Aprovada'
+      'Concluir'
+      'Cancelada')
   end
 end

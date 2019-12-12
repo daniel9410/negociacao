@@ -12,7 +12,9 @@ uses
   produtos in 'produtos.pas' {frmProdutos},
   PesqProdutos in 'PesqProdutos.pas' {frmBuscaProdutos},
   movimento in 'movimento.pas' {frmMovimento},
-  PesqMovimentacao in 'PesqMovimentacao.pas' {frmBuscaMovimento};
+  PesqMovimentacao in 'PesqMovimentacao.pas' {frmBuscaMovimento},
+  Manutencao in 'Manutencao.pas' {frmManutencao},
+  Relatorio in 'Relatorio.pas' {frmRelatorio};
 
 {$R *.res}
 

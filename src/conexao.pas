@@ -55,6 +55,23 @@ type
     dsoMovimento: TDataSource;
     qryMovimentoNOME_DISTRIBUIDOR: TStringField;
     cdsItens_Movimentototal: TCurrencyField;
+    qryMovimentoCADASTRO: TDateTimeField;
+    qryMovimentoAPROVACAO: TDateTimeField;
+    qryMovimentoCANCELAMENTO: TDateTimeField;
+    qryMovimentoCONCLUSAO: TDateTimeField;
+    dsoRelatorio: TDataSource;
+    qryRelatorio: TADOQuery;
+    BCDField1: TBCDField;
+    StringField1: TStringField;
+    StringField2: TStringField;
+    StringField3: TStringField;
+    StringField4: TStringField;
+    StringField5: TStringField;
+    DateTimeField1: TDateTimeField;
+    DateTimeField2: TDateTimeField;
+    DateTimeField3: TDateTimeField;
+    DateTimeField4: TDateTimeField;
+    qryRelatorioVALOR: TBCDField;
   private
     { Private declarations }
   public

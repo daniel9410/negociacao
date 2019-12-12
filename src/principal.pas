@@ -29,6 +29,7 @@ type
     Conexo1: TMenuItem;
     Configurar1: TMenuItem;
     Sair1: TMenuItem;
+    Manuteno1: TMenuItem;
     procedure Produtor1Click(Sender: TObject);
     procedure Distribuidor1Click(Sender: TObject);
     procedure Produtos1Click(Sender: TObject);
@@ -39,6 +40,8 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormShow(Sender: TObject);
     procedure Negociao1Click(Sender: TObject);
+    procedure Manuteno1Click(Sender: TObject);
+    procedure Relatorio2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -49,7 +52,7 @@ var
   frmPrincipal: TfrmPrincipal;
 
 implementation
-   uses produtor,movimento,conexao, distribuidor, produtos, biblioteca;
+   uses produtor,Manutencao,Relatorio, movimento,conexao, distribuidor, produtos, biblioteca;
 {$R *.dfm}
 
 procedure TfrmPrincipal.Produtor1Click(Sender: TObject);
@@ -124,7 +127,7 @@ begin
     dmConexao.con.Open;
   except
     on e: exception do begin
-      showmessage('erro: '+ e.Message);
+      showmessage('erro, verifique os dados de conexão  no menu conexão| configurar: '+#13+ e.Message);
       abort;
     end;
   end;
@@ -137,6 +140,22 @@ begin
     frmMovimento := TfrmMovimento.Create(Self);
 
   frmMovimento.Show;
+end;
+
+procedure TfrmPrincipal.Manuteno1Click(Sender: TObject);
+begin
+  if frmManutencao = nil then
+    frmManutencao := TfrmManutencao.Create(Self);
+
+  frmManutencao.Show;
+end;
+
+procedure TfrmPrincipal.Relatorio2Click(Sender: TObject);
+begin
+  if frmRelatorio = nil then
+    frmRelatorio := TfrmRelatorio.Create(Self);
+
+  frmRelatorio.Show;
 end;
 
 end.
